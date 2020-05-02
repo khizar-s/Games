@@ -151,4 +151,181 @@ public class Model {
         }
     }
 
+    /**
+     * @brief Updates board
+     * @param s Represents the list of points to run a move on
+     * @details Moves dots above selected points down and generates new dots in top row
+     */
+    private ArrayList<ArrayList<DotT>> updateboard(ArrayList<PointT> s) {
+        ArrayList<ArrayList<DotT>> updated = this.board;
+    	for (PointT p : s) {
+            updated.get(p.row()).set(p.col(), DotT.EMPTY);
+        }
+    	for (PointT p : s) {
+    		while (updated.get(p.row()).get(p.col()) == DotT.EMPTY) {
+	            for (int r = p.row(); r >= 0; r--) {
+	            	if (r == 0) {
+	        			updated.get(r).set(p.col(), randomColor());
+	            	} else {
+	            		updated.get(r).set(p.col(), updated.get(r-1).get(p.col()));
+	            	}
+	            }
+    		}
+        }
+        return updated;
+    }
+
+    /**
+     * @brief Decrements turns
+     */
+    public void decrement_turn() {
+        turns_left--;
+    }
+
+    /**
+     * @brief Updates the counters
+     * @param s Represents the list of points to run a move on
+     * @details Doesn't let counters go below 0
+     */
+    public void updatecount(ArrayList<PointT> s) {
+        for (PointT p : s) {
+            DotT c = getDot(p.row(), p.col());
+            if (c == DotT.RED) {
+            	if (red_left > 0) {
+                    red_left--;
+                }                    
+            } else if (c == DotT.GREEN) {
+            	if (green_left > 0) {
+                    green_left--;
+                }
+            } else if (c == DotT.BLUE) {
+            	if (blue_left > 0) {
+                    blue_left--;
+                }
+            } else if (c == DotT.ORANGE) {
+            	if (orange_left > 0) {
+                    orange_left--;
+                }
+            } else {
+            	if (pink_left > 0) {
+                    pink_left--;
+                }
+            }
+        }
+    }
+
+    /**
+     * @brief Checks for same color of dots
+     * @param s Represents the list of points to run a move on
+     * @return True/False depending on whether all the points have the same color
+     */
+    private boolean isvalidmove(ArrayList<PointT> s) {
+        for (PointT p : s) {
+            if (this.board.get(p.row()).get(p.col()) != this.board.get(s.get(0).row()).get(s.get(0).col())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @brief Checks for point validity
+     * @param p Represents the point to check for
+     * @return True/False depending on whether the point has valid rows and columns
+     */
+    private boolean validPoint(PointT p) {
+        return (isvalidRow(p.row()) && isvalidCol(p.col()));
+    }
+
+    /**
+     * @brief Checks for row validity
+     * @param i Represents the row to check for 
+     * @return True/False depending on whether the row is within range
+     */
+    private boolean isvalidRow(int i) {
+        return (i >= 0 && i < size);
+    }
+
+    /**
+     * @brief Checks for column validity
+     * @param i Represents the column to check for 
+     * @return True/False depending on whether the column is within range
+     */
+    private boolean isvalidCol(int i) {
+        return (i >= 0 && i < size);
+    }
+
+    /**
+     * @brief Checks whether points are connected
+     * @param s Represents the list of points to run a move on
+     * @return True/False depending on whether points are connected
+     * @details Checks to see if next point is connected to current point
+     */
+    private boolean isconnected(ArrayList<PointT> s) {
+    	boolean ret = false;
+        for (int i = 0; i < s.size()-1; i++) {
+            if (s.get(i).row() == s.get(i+1).row()) {
+                if (Math.abs(s.get(i).col() - s.get(i+1).col()) == 1) {
+                    ret = true;
+                }
+            } else if (s.get(i).col() == s.get(i+1).col()) {
+                if (Math.abs(s.get(i).row() - s.get(i+1).row()) == 1) {
+                    ret = true;
+                }
+            } else {
+            	ret = false;
+            	break;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * @brief Checks to see if game is over
+     * @return True/False depending on whether the game is over
+     * @details Game is over if all counters are zero when turns are not less than zero, or 
+     * when turns reach zero but there still exist counters to reach
+     */
+    public Boolean isgameover() {
+    	boolean ret;
+        if (get_blue() == 0 &&
+        		get_green() == 0 &&
+                get_red() == 0 &&
+                get_orange() == 0 &&
+                get_pink() == 0 &&
+                get_turns() >= 0) {
+        	ret = true;
+        	finalmessage = "You Won!";
+        } else if ((get_blue() > 0 ||
+        		get_green() > 0 ||
+                get_red() > 0 ||
+                get_orange() > 0 ||
+                get_pink() > 0) &&
+                get_turns() == 0) {
+        	ret = true;
+        	finalmessage = "You Lost!";
+        } else {
+        	ret = false;
+        }
+        return ret;
+    }
+    
+    /**
+     * @brief Generates a random color
+     * @return A random DotT color
+     */
+    public static DotT randomColor() {
+        double j = Math.random();
+        if (j < 0.2) {
+            return DotT.RED;
+        } else if (j < 0.4) {
+            return DotT.BLUE;
+        } else if (j < 0.6) {
+            return DotT.GREEN;
+        } else if (j < 0.8) {
+            return DotT.ORANGE;
+        } else {
+            return DotT.PINK;
+        }
+    }
 }
