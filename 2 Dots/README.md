@@ -6,4 +6,6 @@ TODO:
   - Model View Controller
 
 - [x] Create Model to create game ADT
+  - [x] Create DotT for types of Dots
+  - [x] Create PointT for Point ADT
 - [ ] Create View + Controller combined
