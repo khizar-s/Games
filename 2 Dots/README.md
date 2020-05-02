@@ -3,7 +3,7 @@ A Java representation of the game 2 Dots, which can be viewed here: </br> https:
 
 TODO:
 - [x] Choose Design Pattern
-  - Chose Model View Controller
-- [ ] Create Model
-- [ ] Create View
-- [ ] Create Controller
+  - Model View Controller
+
+- [x] Create Model to create game ADT
+- [ ] Create View + Controller combined
