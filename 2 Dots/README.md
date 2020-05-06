@@ -8,4 +8,6 @@ TODO:
 - [x] Create Model to create game ADT
   - [x] Create DotT for types of Dots
   - [x] Create PointT for Point ADT
-- [ ] Create View + Controller combined
+- [x] Create View + Controller combined
+  - [x] Create View for mainscreen and game configuration input
+  - [x] Create Board for gameboard and player move input
