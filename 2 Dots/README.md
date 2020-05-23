@@ -22,3 +22,7 @@ java -jar 2Dots.jar
 OR
 run the jar file through the GUI
 ```
+
+### Improvements
+
+- [ ] Modify to have a dynamically sized array instead of a fixed number
